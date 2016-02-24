@@ -1,4 +1,9 @@
-package com.zjffdu.tutorial.spark.java.udf;/*
+package com.zjffdu.tutorial.spark
+
+import org.apache.spark.sql.hive.HiveContext
+import org.apache.spark.{SparkContext, SparkConf}
+
+/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -14,17 +19,12 @@ package com.zjffdu.tutorial.spark.java.udf;/*
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+object SparkHiveExample {
 
-import org.apache.spark.sql.api.java.UDF1;
-
-public class MyUDF3 implements UDF1<String,String> {
-
-  public MyUDF3(int a) {
-
-  }
-  @Override
-  public String call(String s) throws Exception {
-    return null;
+  def main(args:Array[String]): Unit = {
+    val conf = new SparkConf().setAppName("example")
+    val sc = new SparkContext(conf)
+    val hiveContext = new HiveContext(sc)
+    hiveContext.tables().show()
   }
 }
-

@@ -1,4 +1,4 @@
-package com.zjffdu.tutorial.spark.java.udf;/*
+package com.zjffdu.tutorial.spark.udf;/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -15,6 +15,28 @@ package com.zjffdu.tutorial.spark.java.udf;/*
  * limitations under the License.
  */
 
-public class MyUDF0 {
+import org.apache.spark.sql.api.java.UDF1;
+import org.apache.spark.sql.api.java.UDF2;
 
+import java.lang.reflect.ParameterizedType;
+import java.util.List;
+
+
+
+public class MyUDF2 implements UDF1<String,String>, UDF2<String,String,String> {
+
+
+  public static void main(String[] args) {
+
+  }
+
+  @Override
+  public String call(String s) throws Exception {
+    return null;
+  }
+
+  @Override
+  public String call(String s, String s2) throws Exception {
+    return null;
+  }
 }

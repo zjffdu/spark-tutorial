@@ -1,4 +1,4 @@
-package com.zjffdu.tutorial.spark.java.udf;/*
+package com.zjffdu.tutorial.spark.udf;/*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -16,35 +16,15 @@ package com.zjffdu.tutorial.spark.java.udf;/*
  */
 
 import org.apache.spark.sql.api.java.UDF1;
-import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+public class MyUDF3 implements UDF1<String,String> {
 
+  public MyUDF3(int a) {
 
-public class MyUDF implements UDF1<String, String> {
+  }
   @Override
   public String call(String s) throws Exception {
-    return s+ ".suffix";
-
-  }
-
-  public void f() {
-//    getClass().getGenericSuperclass()
-    Type[] types = getClass().getGenericInterfaces();
-    for (Type type: types) {
-      System.out.println(type);
-      System.out.println(type.getClass());
-      ParameterizedTypeImpl pType = ((ParameterizedTypeImpl)type);
-      System.out.println(pType.getOwnerType());
-      System.out.println(pType.getRawType());
-      int n= pType.getActualTypeArguments().length;
-       System.out.println(n);
-    }
-
-  }
-  public static void main(String[] args) {
-
-    new MyUDF().f();
+    return null;
   }
 }
+

@@ -10,12 +10,14 @@ import org.apache.spark.streaming._
 object SparkStreamingExample {
 
   def main(args:Array[String]): Unit = {
-//    val conf = new SparkConf().setAppName("Streaming Example").setMaster("local[*]")
-//    val ssc = new StreamingContext(conf, Seconds(1))
-//    val lines = ssc.
-//    val wordCount = lines.flatMap(line=>line.split(" ")).map(w=>(w,1)).reduceByKey(_ + _)
-//    wordCount.print()
-//    ssc.start()
-//    ssc.awaitTermination()
+    val conf = new SparkConf().setAppName("streaming example").setMaster("local[4]")
+    val ssc = new StreamingContext(conf, Seconds(1))
+
+    val input = ssc.socketTextStream("localhost",9999)
+    val wc = input.flatMap(line=>line.split("\\s")).map(w=>(w,1)).reduceByKey(_ + _)
+    wc.print()
+
+    ssc.start()
+    ssc.awaitTermination()
   }
 }

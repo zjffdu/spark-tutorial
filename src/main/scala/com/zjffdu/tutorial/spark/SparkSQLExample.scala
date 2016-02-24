@@ -20,24 +20,21 @@ object SparkSQLExample {
     val sc = new SparkContext(conf)
     val sqlContext = new SQLContext(sc)
     import sqlContext.implicits._
-    import sqlContext._
-    sqlContext.udf.register("f1", (a:Int) => a +1)
-    val df1 = Seq(
-      (1, "jeff", 12),
-      (2, "andy", 34),
-      (3, "pony", 23),
-      (4, "jeff", 14)
-    ).toDF("id", "name", "age")
-    df1.registerTempTable("df1")
-    val df2 = Seq(
-      (1, "One"),
-      (2, "Two")
-    ).toDF("id", "ID")
-    df2.registerTempTable("df2")
-    df1.printSchema()
-    df2.printSchema()
 
-    df1.withColumn("age_new", $"f1(age)").show()
-//    sqlContext.create
+
+    sqlContext.udf.register("f", (a:Int, b:Option[Int]) =>{
+      if (a==1 && !b.isDefined) {
+        "Big"
+      } else {
+        "Small"
+      }
+    })
+
+    val df =sqlContext.createDataFrame(Seq(
+      (1,2),
+      (2,3),
+      (1,None)
+    ))
+    df.printSchema()
   }
 }
