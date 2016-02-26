@@ -113,11 +113,6 @@
             <classifier>models-chinese</classifier>
         </dependency>
         <dependency>
-            <groupId>org.apache.zeppelin</groupId>
-            <artifactId>zeppelin-interpreter</artifactId>
-            <version>0.6.0-incubating-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.oozie</groupId>
             <artifactId>oozie-client</artifactId>
             <version>4.2.0</version>
