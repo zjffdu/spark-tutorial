@@ -1,8 +1,3 @@
-package com.zjffdu.tutorial.spark
-
-import org.apache.spark.sql.hive.HiveContext
-import org.apache.spark.{SparkContext, SparkConf}
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -19,12 +14,31 @@ import org.apache.spark.{SparkContext, SparkConf}
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-object SparkHiveExample {
 
-  def main(args:Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("example")//.setMaster("local")
+// scalastyle:off println
+package org.apache.spark.examples.ml
+
+import org.apache.spark.{SparkConf, SparkContext}
+// $example on$
+import org.apache.spark.ml.feature.SQLTransformer
+// $example off$
+import org.apache.spark.sql.SQLContext
+
+object SQLTransformerExample {
+  def main(args: Array[String]) {
+    val conf = new SparkConf().setAppName("SQLTransformerExample")
     val sc = new SparkContext(conf)
-    val hiveContext = new HiveContext(sc)
-    hiveContext.tables().show()
+    val sqlContext = new SQLContext(sc)
+
+    // $example on$
+    val df = sqlContext.createDataFrame(
+      Seq((0, 1.0, 3.0), (2, 2.0, 5.0))).toDF("id", "v1", "v2")
+
+    val sqlTrans = new SQLTransformer().setStatement(
+      "SELECT *, (v1 + v2) AS v3, (v1 * v2) AS v4 FROM __THIS__")
+
+    sqlTrans.transform(df).show()
+    // $example off$
   }
 }
+// scalastyle:on println

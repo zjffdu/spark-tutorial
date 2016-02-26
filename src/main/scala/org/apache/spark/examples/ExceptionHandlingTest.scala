@@ -1,8 +1,3 @@
-package com.zjffdu.tutorial.spark
-
-import org.apache.spark.sql.hive.HiveContext
-import org.apache.spark.{SparkContext, SparkConf}
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -19,12 +14,21 @@ import org.apache.spark.{SparkContext, SparkConf}
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-object SparkHiveExample {
 
-  def main(args:Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("example")//.setMaster("local")
-    val sc = new SparkContext(conf)
-    val hiveContext = new HiveContext(sc)
-    hiveContext.tables().show()
+package org.apache.spark.examples
+
+import org.apache.spark.{SparkConf, SparkContext}
+
+object ExceptionHandlingTest {
+  def main(args: Array[String]) {
+    val sparkConf = new SparkConf().setAppName("ExceptionHandlingTest")
+    val sc = new SparkContext(sparkConf)
+    sc.parallelize(0 until sc.defaultParallelism).foreach { i =>
+      if (math.random > 0.75) {
+        throw new Exception("Testing exception handling")
+      }
+    }
+
+    sc.stop()
   }
 }

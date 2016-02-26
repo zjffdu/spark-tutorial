@@ -1,69 +1,81 @@
-package com.zjffdu.tutorial.spark
-
-import _root_.java.io.FileInputStream
-import _root_.java.util.Properties
-
-import org.apache.commons.io.IOUtils
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat
-import org.apache.spark.sql.SQLContext
-import org.apache.spark.sql.types.Decimal
-import org.apache.spark.storage.StorageLevel
-import org.apache.spark._
-
-import org.apache.spark.sql.types.Decimal
-import scala.reflect.runtime.universe._
-
-case class People(name: String, age: Int)
-
-case class Trade(quantity: Decimal, price: Decimal)
-
-/**
- * Created by jzhang on 7/30/15.
- */
-
-
-object SparkExample {
-
-
-  trait User {
-
-  }
-
-  class User1(val name: String) extends User
-
-  class User2(val name: String) extends User
-
-  object User1 {
-    def unapply(u: User1): Option[String] = Some(u.name)
-  }
-
-  object User2 {
-    def unapply(u: User2): Option[String] = Some(u.name)
-  }
-
-  object GivenNames {
-    def unapplySeq(s: String): Option[(String, String, Seq[String])] = {
-      val tokens = s.split("\\s")
-      if (tokens.length < 2)
-        None
-      else
-        Some(tokens(0), tokens(1), tokens.drop(2).toSeq)
-    }
-  }
-
-  def collect[A, B](list: List[A])(pf: PartialFunction[A, B]): List[B] = {
-    list.collect(pf)
-  }
-
-  def main(args: Array[String]): Unit = {
-
-    val conf = new SparkConf().setAppName("test").setMaster("local")
-    val sc = new SparkContext(conf)
-
-    val rdd = sc.textFile("/user/jzhang/dataset/20news-bydate-train.txt")
-    val wcrdd = rdd.flatMap(line=>line.split("\\s")).groupBy(e => 1, 2)
-      //.map(e=>(e._1,e._2.size))
-
-
-  }
-}
+//package com.zjffdu.tutorial.spark
+//
+//import _root_.java.io.FileInputStream
+//import _root_.java.util.Properties
+//
+//import org.apache.commons.io.IOUtils
+//import org.apache.hadoop.mapreduce.lib.input.TextInputFormat
+//import org.apache.spark.sql.SQLContext
+//import org.apache.spark.sql.catalyst.util.GenericArrayData
+//import org.apache.spark.sql.types.Decimal
+//import org.apache.spark.storage.StorageLevel
+//import org.apache.spark._
+//
+//import org.apache.spark.sql.types.Decimal
+//import scala.reflect.runtime.universe._
+//import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
+//
+//
+//import org.apache.spark.
+//{SparkConf, SparkContext}
+//import org.apache.spark.sql.catalyst.InternalRow
+//import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
+//import org.apache.spark.sql.types._
+//
+//@SQLUserDefinedType(udt = classOf[AUDT])
+//case class A(list: Seq[B])
+//
+//class AUDT extends UserDefinedType[A] {
+//  override def sqlType: DataType = StructType(Seq(StructField("list", ArrayType(BUDT, containsNull = false), nullable = true)))
+//
+//  override def userClass: Class[A] = classOf[A]
+//
+//  override def serialize(obj: Any): Any = obj match {
+//    case A(list) => val row = new GenericMutableRow(1)
+//      row.update(0, new GenericArrayData (list.map (_.asInstanceOf[Any] ).toArray) )
+//      row
+//  }
+//
+//  override def deserialize(datum: Any): A = {
+//    datum match {
+//      case row: InternalRow => new A(row.getArray(0).toArray(BUDT).toSeq)
+//    }
+//  }
+//}
+//
+//object AUDT extends AUDT
+//
+//@SQLUserDefinedType(udt = classOf[BUDT])
+//case class B(text: Int)
+//
+//class BUDT extends UserDefinedType[B] {
+//  override def sqlType: DataType = StructType(Seq(StructField("num", IntegerType, nullable = false)))
+//
+//  override def userClass: Class[B] = classOf[B]
+//
+//  override def serialize(obj: Any): Any = obj match {
+//    case B(text) => val row = new GenericMutableRow(1)
+//      row.setInt (0, text)
+//      row
+//  }
+//
+//  override def deserialize(datum: Any): B = {
+//    datum match {
+//      case row: InternalRow => new B(row.getInt(0))
+//    }
+//  }
+//}
+//
+//object BUDT extends BUDT
+//
+//object SparkExample {
+//  def main(args: Array[String]) = {
+//    val col = Seq(new A(Seq(new B(1), new B(2))), new A(Seq(new B(3), new B(4))))
+//    val sc = new SparkContext(new SparkConf().setMaster("local[1]").setAppName("TestSpark"))
+//    val sqlContext = new org.apache.spark.sql.SQLContext(sc)
+//    import sqlContext.implicits._
+//    val df = sc.parallelize(1 to 2 zip col).toDF("id", "b")
+//    df.select("b").show()
+//    df.collect().foreach(println)
+//  }
+//}

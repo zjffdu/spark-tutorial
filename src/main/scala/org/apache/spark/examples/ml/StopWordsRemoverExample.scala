@@ -1,8 +1,3 @@
-package com.zjffdu.tutorial.spark
-
-import org.apache.spark.sql.hive.HiveContext
-import org.apache.spark.{SparkContext, SparkConf}
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -19,12 +14,35 @@ import org.apache.spark.{SparkContext, SparkConf}
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-object SparkHiveExample {
 
-  def main(args:Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("example")//.setMaster("local")
+// scalastyle:off println
+package org.apache.spark.examples.ml
+
+import org.apache.spark.{SparkConf, SparkContext}
+// $example on$
+import org.apache.spark.ml.feature.StopWordsRemover
+// $example off$
+import org.apache.spark.sql.SQLContext
+
+object StopWordsRemoverExample {
+  def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().setAppName("StopWordsRemoverExample")
     val sc = new SparkContext(conf)
-    val hiveContext = new HiveContext(sc)
-    hiveContext.tables().show()
+    val sqlContext = new SQLContext(sc)
+
+    // $example on$
+    val remover = new StopWordsRemover()
+      .setInputCol("raw")
+      .setOutputCol("filtered")
+
+    val dataSet = sqlContext.createDataFrame(Seq(
+      (0, Seq("I", "saw", "the", "red", "baloon")),
+      (1, Seq("Mary", "had", "a", "little", "lamb"))
+    )).toDF("id", "raw")
+
+    remover.transform(dataSet).show()
+    // $example off$
+    sc.stop()
   }
 }
+// scalastyle:on println

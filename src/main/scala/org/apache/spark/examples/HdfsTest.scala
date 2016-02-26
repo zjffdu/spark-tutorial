@@ -1,8 +1,3 @@
-package com.zjffdu.tutorial.spark
-
-import org.apache.spark.sql.hive.HiveContext
-import org.apache.spark.{SparkContext, SparkConf}
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -19,12 +14,32 @@ import org.apache.spark.{SparkContext, SparkConf}
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-object SparkHiveExample {
 
-  def main(args:Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("example")//.setMaster("local")
-    val sc = new SparkContext(conf)
-    val hiveContext = new HiveContext(sc)
-    hiveContext.tables().show()
+// scalastyle:off println
+package org.apache.spark.examples
+
+import org.apache.spark._
+
+
+object HdfsTest {
+
+  /** Usage: HdfsTest [file] */
+  def main(args: Array[String]) {
+    if (args.length < 1) {
+      System.err.println("Usage: HdfsTest <file>")
+      System.exit(1)
+    }
+    val sparkConf = new SparkConf().setAppName("HdfsTest")
+    val sc = new SparkContext(sparkConf)
+    val file = sc.textFile(args(0))
+    val mapped = file.map(s => s.length).cache()
+    for (iter <- 1 to 10) {
+      val start = System.currentTimeMillis()
+      for (x <- mapped) { x + 2 }
+      val end = System.currentTimeMillis()
+      println("Iteration " + iter + " took " + (end-start) + " ms")
+    }
+    sc.stop()
   }
 }
+// scalastyle:on println

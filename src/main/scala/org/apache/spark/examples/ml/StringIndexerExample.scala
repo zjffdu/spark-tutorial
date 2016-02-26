@@ -1,8 +1,3 @@
-package com.zjffdu.tutorial.spark
-
-import org.apache.spark.sql.hive.HiveContext
-import org.apache.spark.{SparkContext, SparkConf}
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -19,12 +14,35 @@ import org.apache.spark.{SparkContext, SparkConf}
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-object SparkHiveExample {
 
-  def main(args:Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("example")//.setMaster("local")
+// scalastyle:off println
+package org.apache.spark.examples.ml
+
+import org.apache.spark.{SparkConf, SparkContext}
+// $example on$
+import org.apache.spark.ml.feature.StringIndexer
+// $example off$
+import org.apache.spark.sql.SQLContext
+
+object StringIndexerExample {
+  def main(args: Array[String]): Unit = {
+    val conf = new SparkConf().setAppName("StringIndexerExample")
     val sc = new SparkContext(conf)
-    val hiveContext = new HiveContext(sc)
-    hiveContext.tables().show()
+    val sqlContext = new SQLContext(sc)
+
+    // $example on$
+    val df = sqlContext.createDataFrame(
+      Seq((0, "a"), (1, "b"), (2, "c"), (3, "a"), (4, "a"), (5, "c"))
+    ).toDF("id", "category")
+
+    val indexer = new StringIndexer()
+      .setInputCol("category")
+      .setOutputCol("categoryIndex")
+
+    val indexed = indexer.fit(df).transform(df)
+    indexed.show()
+    // $example off$
+    sc.stop()
   }
 }
+// scalastyle:on println

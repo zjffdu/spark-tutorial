@@ -1,5 +1,6 @@
 package com.zjffdu.tutorial.spark
 
+import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.{SaveMode, SQLContext}
 
@@ -22,19 +23,17 @@ object SparkSQLExample {
     import sqlContext.implicits._
 
 
-    sqlContext.udf.register("f", (a:Int, b:Option[Int]) =>{
-      if (a==1 && !b.isDefined) {
-        "Big"
-      } else {
-        "Small"
-      }
-    })
+//    val df = hiveContext.read.orc("file:///Users/jzhang/github/spark/python/test_support/sql/orc_partitioned/b=0/c=0/part-r-00000-829af031-b970-49d6-ad39-30460a0be2c8.orc")
 
-    val df =sqlContext.createDataFrame(Seq(
-      (1,2),
-      (2,3),
-      (1,None)
-    ))
-    df.printSchema()
+    val rdd = sc.parallelize(Seq(1, 10))
+    val rdd2 = sc.parallelize(Seq("1","2"))
+
+
+    val seq = Seq((1,"jeff", 23),(2,"andy", 25), (3,"jeff", 34))
+    val seq2 = Seq((1, "cs"), (2, "math"))
+    val df1 = seq.toDF("id", "name", "age")
+    val df2 = seq2.toDF("id2", "major")
+
+    df1.map(row=>row.get(0)).collect().foreach(println)
   }
 }
