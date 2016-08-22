@@ -1,7 +1,10 @@
 package com.zjffdu.tutorial;
 
+import com.zjffdu.tutorial.spark.SparkExample$;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.Random;
 
 /**
@@ -44,9 +47,8 @@ public class JavaExample {
     }
 
     public static void main(String[] args) {
-        Thread read = new ReadThread();
-        Thread update = new UpdateThread();
-        read.start();
-        update.start();
+
+        SparkExample$ a = SparkExample$.MODULE$;
+        a.main(args);
     }
 }

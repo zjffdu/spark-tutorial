@@ -22,20 +22,22 @@ object MLExample {
     import sqlContext.implicits._
 
     val df = sqlContext.createDataFrame(Seq(
-      (1.0, "hello world hadoop is"),
-      (0.0, "apache hadoop"),
-      (0.0, "apache spark i")
-    )).toDF("label", "doc")
+      (1, ("hello hadoop"),"P", Vectors.dense(1.0,0.0, 1.0)),
+      (2, ("hello spark"), "N", Vectors.dense(1.2,1.0, 2.1)),
+      (3, ("hello pig"), "P", Vectors.dense(1.5, 0.0, 2.4))
+    )).toDF("id", "text", "category", "rawVector")
 
-    val tokenizer = new RegexTokenizer()
-      .setInputCol("doc")
-      .setOutputCol("words")
-      .setPattern("\\s")
-      .setGaps(false)
+    val tokenizer = new Tokenizer()
+      .setInputCol("text")
+      .setOutputCol("tokens")
 
-    val pipeline = new Pipeline().setStages(Array(tokenizer))
-    val model = pipeline.fit(df)
+    val vectorIndexer = new VectorIndexer()
+      .setInputCol("rawVector")
+      .setOutputCol("newVector")
+      .setMaxCategories(3)
 
-    model.transform(df).collect.foreach(println)
+    val model = vectorIndexer.fit(df)
+    model.categoryMaps.foreach(println)
+    model.transform(df).show(false)
   }
 }

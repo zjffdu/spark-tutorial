@@ -1,5 +1,6 @@
 package com.zjffdu.tutorial.spark
 
+import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.{SparkContext, SparkConf}
 
@@ -22,9 +23,12 @@ import org.apache.spark.{SparkContext, SparkConf}
 object SparkHiveExample {
 
   def main(args:Array[String]): Unit = {
-    val conf = new SparkConf().setAppName("example")//.setMaster("local")
+    val conf = new SparkConf().setAppName("example").setMaster("local")
     val sc = new SparkContext(conf)
+    val sqlContext = new SQLContext(sc)
     val hiveContext = new HiveContext(sc)
-    hiveContext.tables().show()
+    hiveContext.createDataFrame(Seq((1,2),(2,3)))
+    println(SQLContext.getOrCreate(sc))
+
   }
 }
