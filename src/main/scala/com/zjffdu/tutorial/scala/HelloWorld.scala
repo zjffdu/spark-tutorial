@@ -12,7 +12,6 @@ import com.zjffdu.tutorial.spark.Test
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.hadoop.io.compress.CompressionCodecFactory
-import org.apache.spark.internal.config._
 import org.apache.spark.repl.SparkILoop
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
