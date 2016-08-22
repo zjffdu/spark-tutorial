@@ -12,11 +12,13 @@
     <properties>
         <java.version>1.7</java.version>
         <!--<spark.version>1.6.0.2.3.4.1-2</spark.version>-->
-        <spark.version>1.6.0</spark.version>
+        <spark.version>1.6.2</spark.version>
         <spark.scope>compile</spark.scope>
         <hadoop.version>2.6.0</hadoop.version>
         <jetty.version>9.2.10.v20150310</jetty.version>
         <scala.binary.version>2.10</scala.binary.version>
+        <jetty.version>8.1.14.v20131031</jetty.version>
+        <javax.servlet-api.version>3.1.0</javax.servlet-api.version>
 
     </properties>
 
@@ -60,6 +62,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
+            <artifactId>spark-repl_2.10</artifactId>
+            <version>${spark.version}</version>
+            <scope>${spark.scope}</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-flume_2.10</artifactId>
             <version>${spark.version}</version>
             <scope>${spark.scope}</scope>
@@ -67,7 +75,7 @@
         <dependency>
             <groupId>com.databricks</groupId>
             <artifactId>spark-csv_2.10</artifactId>
-            <version>1.3.0</version>
+            <version>1.4.0</version>
         </dependency>
         <dependency>
             <groupId>net.sf.py4j</groupId>
@@ -104,14 +112,20 @@
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>3.5.2</version>
+            <version>3.6.0</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.nlp</groupId>
             <artifactId>stanford-corenlp</artifactId>
-            <version>3.5.2</version>
+            <version>3.6.0</version>
             <classifier>models-chinese</classifier>
         </dependency>
+        <!--<dependency>-->
+        <!--<groupId>edu.stanford.nlp</groupId>-->
+        <!--<artifactId>stanford-corenlp</artifactId>-->
+        <!--<version>3.6.0</version>-->
+        <!--<classifier>models</classifier>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.oozie</groupId>
             <artifactId>oozie-client</artifactId>
@@ -182,6 +196,71 @@
             <version>3.3.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>3.0.0-beta-2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ning</groupId>
+            <artifactId>async-http-client</artifactId>
+            <version>1.9.33</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-http</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-continuation</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-util</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-security</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-plus</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.servlet-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scalatra</groupId>
+            <artifactId>scalatra_2.10</artifactId>
+            <version>2.3.0.M1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-jdbc</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+
     </dependencies>
 
 
@@ -195,6 +274,13 @@
     <build>
 
         <plugins>
+
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>9.0.5.v20130815</version>
+            </plugin>
+
             <plugin>
                 <groupId>org.scala-tools</groupId>
                 <artifactId>maven-scala-plugin</artifactId>

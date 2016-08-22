@@ -15,7 +15,6 @@ object ImpersonationExample {
 
     ugi.doAs(new PrivilegedExceptionAction[Void] {
       def run(): Void = {
-
         val fs = FileSystem.get(new Configuration())
         fs.globStatus(new Path(".")).foreach(println(_))
         return null
