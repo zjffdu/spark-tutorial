@@ -9,15 +9,15 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 object FlumeExample {
 
   def main(args:Array[String]): Unit = {
-    import org.apache.spark.streaming.flume._
+//    import org.apache.spark.streaming.flume._
 
-    val conf = new SparkConf().setAppName("test").setMaster("local[4]")
-    val sc = new SparkContext(conf)
-    val ssc = new StreamingContext(sc, Seconds(1))
-    val flumeStream = FlumeUtils.createStream(ssc, "localhost", 3333)
-
-
-    ssc.start()
-    ssc.awaitTermination()
+//    val conf = new SparkConf().setAppName("test").setMaster("local[4]")
+//    val sc = new SparkContext(conf)
+//    val ssc = new StreamingContext(sc, Seconds(1))
+//    val flumeStream = FlumeUtils.createStream(ssc, "localhost", 3333)
+//
+//
+//    ssc.start()
+//    ssc.awaitTermination()
   }
 }

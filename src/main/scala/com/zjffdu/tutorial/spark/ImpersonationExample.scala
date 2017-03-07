@@ -15,15 +15,15 @@ object ImpersonationExample {
 
     ugi.doAs(new PrivilegedExceptionAction[Void] {
       def run(): Void = {
-//        val fs = FileSystem.get(new Configuration())
-//        fs.globStatus(new Path(".")).foreach(println(_))
-//        return null
+        val fs = FileSystem.get(new Configuration())
+        fs.globStatus(new Path(".")).foreach(println(_))
+        println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
         val processBuilder = new ProcessBuilder()
-        processBuilder.command("hadoop -fs ls .")
+        processBuilder.environment()
+        processBuilder.command("/Users/jzhang/Java/lib/hadoop-2.7.2/bin/hadoop", "fs", "-ls", ".")
         processBuilder.inheritIO()
         val proc = processBuilder.start()
         proc.waitFor()
-
         return null
       }
     })
