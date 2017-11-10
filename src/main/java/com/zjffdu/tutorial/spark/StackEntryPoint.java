@@ -15,6 +15,8 @@ package com.zjffdu.tutorial.spark;/*
  * limitations under the License.
  */
 
+import org.apache.spark.SparkConf;
+
 public class StackEntryPoint {
   private MyStack stack;
 
@@ -25,5 +27,12 @@ public class StackEntryPoint {
 
   public MyStack getStack() {
     return this.stack;
+  }
+
+  public static void main(String[] args) {
+//    SparkConf conf = new SparkConf();
+//    conf.setAppName("test");
+//    conf.setMaster("local");
+//    SparkContext sc
   }
 }

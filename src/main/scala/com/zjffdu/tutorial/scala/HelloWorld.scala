@@ -1,58 +1,107 @@
-//package com.zjffdu.tutorial.scala
-//
-//import java.io.{BufferedReader, File, FileInputStream, PrintWriter}
-//import java.lang.reflect.{ParameterizedType, Type}
-//import java.net.URI
-//import java.sql.DriverManager
-//import java.text.SimpleDateFormat
-//import java.util.concurrent.TimeUnit
-//import java.util.{Calendar, Date, Properties, TimeZone}
-//
-//import com.ning.http.client.{AsyncCompletionHandler, AsyncHttpClient, Response}
-//import com.zjffdu.tutorial.spark.Test
-//import com.zjffdu.tutorial.spark.udf.MyUDF
-//import org.apache.hadoop.conf.Configuration
-//import org.apache.hadoop.fs.{FileSystem, Path}
-//import org.apache.hadoop.io.compress.CompressionCodecFactory
-//import org.apache.hadoop.security.SecurityUtil
-//import org.apache.spark.repl.SparkILoop
-//import org.apache.spark.{SparkConf, SparkContext}
-//import org.apache.spark.sql.catalyst.expressions.{Expression, NamedExpression}
-//import org.apache.spark.sql.catalyst.planning.PhysicalOperation._
-//import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-//import org.joda.time.{DateTime, DateTimeZone}
-//
-//import scala.collection.mutable.ListBuffer
-//import scala.concurrent.duration.Duration
-//import scala.concurrent.{Await, Future}
-//import scala.util.{Failure, Random, Success, Try}
-//import scala.concurrent.ExecutionContext.Implicits.global
-//
-//class Test{
-//
-//}
-//object HelloWorld {
-//
-//  def run(time: Long): Future[Int] = {
-//    Future {
-//      Thread.sleep(Random.nextInt(100))
-//      Random.nextInt(10)
-//    }
-//  }
-//
-//  def main(args: Array[String]): Unit = {
-//
-//
-//    def isUDFInterface(t: Type): Unit = {
-//      if (t.isInstanceOf[ParameterizedType]) {
-//        val pType = t.asInstanceOf[ParameterizedType]
-//        println(pType.getRawType.asInstanceOf[Class[_]].getCanonicalName)
-//      }
-//    }
-//
-//
-//  }
-//
-//
-//
-//}
+package com.zjffdu.tutorial.scala
+
+import com.google.gson.Gson
+import org.apache.spark.repl.SparkILoop
+
+import scala.tools.nsc.Settings
+import scala.tools.nsc.interpreter.InteractiveReader
+
+
+class A(val name: String) {
+  def f: Unit =println(name)
+}
+class B(override val name: String = "") extends A(name) {
+  val a: String = "hello"
+
+  def g: Unit=println(name)
+}
+
+
+import java.io.File
+
+
+import breeze.linalg._
+import breeze.plot.Figure
+import io.continuum.bokeh._
+
+
+
+object IrisSource extends ColumnDataSource {
+
+  val colormap = Map[Int, Color](0 -> Color.Red, 1 ->
+    Color.Green, 2 -> Color.Blue)
+  val iris = csvread(file = new File("/Users/jzhang/iris.data"), separator = ',')
+  val sepalLength = column(iris(::, 0))
+  val sepalWidth = column(iris(::, 1))
+  val petalLength = column(iris(::, 2))
+  val petalWidth = column(iris(::, 3))
+  val species = column(iris(::,4))
+  val speciesColor = column(species.value.map(v =>
+    colormap(v.round.toInt)))
+}
+
+object Bokeh_Scala extends  App{
+
+  import IrisSource.{colormap,sepalLength,sepalWidth,petalLength,petalWidth, speciesColor}
+
+  val plot = new Plot().title("Iris Petal Length vs Width")
+  val diamond = new Diamond()
+    .x(petalLength)
+    .y(petalWidth)
+    .fill_color(Color.Blue)
+    .fill_alpha(0.5)
+    .size(5)
+
+  val dataPointRenderer = new GlyphRenderer().data_source(IrisSource).glyph(diamond)
+
+  val xRange = new DataRange1d().sources(petalLength :: Nil)
+  val yRange = new DataRange1d().sources(petalWidth :: Nil)
+
+  plot.x_range(xRange).y_range(yRange)
+
+  //X and Y Axis
+  val xAxis = new LinearAxis().plot(plot).axis_label("Petal Length").
+    bounds((1.0, 7.0))
+  val yAxis = new LinearAxis().plot(plot).axis_label("Petal Width").
+    bounds((0.0, 2.5))
+  plot.below <<= (listRenderer => (xAxis :: listRenderer))
+  plot.left <<= (listRenderer => (yAxis :: listRenderer))
+
+  val xgrid = new Grid().plot(plot).axis(xAxis).dimension(0)
+  val ygrid = new Grid().plot(plot).axis(yAxis).dimension(1)
+
+
+
+  //Adding Legend
+  val setosa = new Diamond().fill_color(Color.Red).size(10).fill_alpha(0.5)
+  val setosaGlyphRnd=new GlyphRenderer().glyph(setosa)
+  val versicolor = new Diamond().fill_color(Color.Green).size(10).fill_alpha(0.5)
+  val versicolorGlyphRnd=new GlyphRenderer().glyph(versicolor)
+  val virginica = new Diamond().fill_color(Color.Blue).size(10).fill_alpha(0.5)
+  val virginicaGlyphRnd=new GlyphRenderer().glyph(virginica)
+
+  val legends = List("setosa" -> List(setosaGlyphRnd), "versicolor" -> List(versicolorGlyphRnd), "virginica" -> List(virginicaGlyphRnd))
+  val legend = new Legend().orientation(LegendOrientation.TopLeft).plot(plot).legends(legends)
+
+  plot.renderers := List[Renderer](xAxis, yAxis, dataPointRenderer, xgrid, ygrid, legend, setosaGlyphRnd, virginicaGlyphRnd, versicolorGlyphRnd)
+
+
+
+
+  //Add the renderer to the plot
+  //plot.renderers := List[Renderer](xAxis, yAxis, dataPointRenderer, xgrid, ygrid)
+
+
+  val panTool = new PanTool().plot(plot)
+  val wheelZoomTool = new WheelZoomTool().plot(plot)
+  val previewSaveTool = new PreviewSaveTool().plot(plot)
+  val resetTool = new ResetTool().plot(plot)
+  val resizeTool = new ResizeTool().plot(plot)
+  val crosshairTool = new CrosshairTool().plot(plot)
+  plot.tools := List(panTool, wheelZoomTool, previewSaveTool, resetTool, resizeTool, crosshairTool)
+
+  val document = new Document(plot)
+  val file = document.save("/Users/jzhang/IrisBokehBreeze.html")
+  file.view()
+
+}// Object Bokeh_Scala ends here

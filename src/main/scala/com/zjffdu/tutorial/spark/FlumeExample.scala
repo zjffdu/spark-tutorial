@@ -1,7 +1,7 @@
 package com.zjffdu.tutorial.spark
 
 import org.apache.spark.{SparkContext, SparkConf}
-import org.apache.spark.streaming.{Seconds, StreamingContext}
+//import org.apache.spark.streaming.{Seconds, StreamingContext}
 
 /**
  * Created by jzhang on 1/27/16.

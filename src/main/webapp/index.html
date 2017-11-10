@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+<script type="text/javascript">
+
+    var app = angular.module("myApp", []);
+    app.controller("myCtrl", function($scope) {
+        $scope.alert = function ($event){
+            alert);
+        }
+    });
+</script>
+
+<body ng-app="myApp" ng-controller="myCtrl">
+<div ng-init="names=['A', 'B', 'C']">
+    <select class="form-control input-sm" ng-model="fda" ng-change="alert($event)" ng-options="value for value in names">
+    </select>
+</div>
+</body>
+
+</html>
